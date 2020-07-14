@@ -1,9 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Kamil Kamiński - my own piece of internet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-      li {
+      :root {
+        --color-light-theme-background1: white;
+        --color-light-theme-background2: rgb(249, 249, 249);
+      }
+
+      .light-theme {
+        --color-background1: var(--color-light-theme-background1);
+        --color-background2: var(--color-light-theme-background2);
+      }
+
+      body {
+        background-color: var(--color-background1);
+      }
+
+      main {
+        margin: 0 auto;
+        width: 90%;
+        background-color: var(--color-background2);
+        padding: 16px;
+      }
+
+      @media (min-width: 576px) {
+        main {
+          width: 75%;
+        }
+      }
+
+      @media (min-width: 768px) {
+        main {
+          width: 65%;
+        }
+      }
+
+      @media (min-width: 992px) {
+        main {
+          width: 50%;
+        }
       }
     </style>
   </head>
@@ -15,6 +52,7 @@
       padding: 0;
       margin: 0;
     "
+    class="light-theme"
   >
     <header style="display: flex; justify-content: flex-end;">
       <nav>
@@ -22,9 +60,32 @@
       </nav>
     </header>
     <main>
-      <p>Hi!</p>
-      <p>My name is Kamil Kamiński and this is my own piece of the internet.</p>
-      <ul style="list-style-type: none; display: flex;">
+      <h1>Hi!</h1>
+      <p>
+        Welcome to my internet property. Take your digital shoes off and make
+        yourself at home.
+      </p>
+      <p>
+        This is a place where I share some info
+        <a href="#about-me">about me</a>, publish some of my tech related notes
+        (I plan on doing so, following the philosophy of learning in public) and
+        who knows what else.
+      </p>
+      <p id="about-me">
+        Oh, so by the way, my name is Kamil Kamiński and I'm a software
+        developer from Wrocław, Poland. Currently my area of expertise happens
+        to be React, Typescript, Node.js and web applications in general. Below
+        you can find some links.
+      </p>
+      <ul
+        style="
+          list-style-type: none;
+          display: flex;
+          margin: 0;
+          justify-content: center;
+          padding: 0;
+        "
+      >
         <li>
           <a target="_blank" href="https://github.com/0ctothorp">
             <svg
@@ -44,7 +105,26 @@
             </svg>
           </a>
         </li>
-        <li><a href="mailto:kkaminski9311@gmail.com">email me</a></li>
+        <li>
+          <a href="mailto:kkaminski9311@gmail.com">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="100"
+              height="100"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+              ></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </a>
+        </li>
       </ul>
     </main>
   </body>
