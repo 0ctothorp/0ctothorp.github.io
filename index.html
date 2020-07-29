@@ -3,62 +3,96 @@
   <head>
     <title>Kamil Kamiński - my own piece of internet</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
     <style>
       :root {
-        --color-light-theme-background1: white;
-        --color-light-theme-background2: rgb(249, 249, 249);
+        --color-dark-theme-background1: rgb(30, 30, 30);
+        --color-dark-theme-background2: rgb(50, 50, 50);
+        --color-main-dark-theme: rgb(197, 197, 197);
       }
 
-      .light-theme {
-        --color-background1: var(--color-light-theme-background1);
-        --color-background2: var(--color-light-theme-background2);
+      .dark-theme {
+        --color-background1: var(--color-dark-theme-background1);
+        --color-background2: var(--color-dark-theme-background2);
+        --color-main: var(--color-main-dark-theme);
+      }
+
+      * {
+        box-sizing: border-box;
       }
 
       body {
         background-color: var(--color-background1);
+        font-family: monospace;
+        color: var(--color-main);
+        font-size: 16px;
       }
 
       main {
-        margin: 0 auto;
-        width: 90%;
+        width: 100%;
         background-color: var(--color-background2);
         padding: 16px;
+        margin-bottom: 20px;
       }
 
       @media (min-width: 576px) {
         main {
           width: 75%;
+          margin: 20px auto;
         }
       }
-
       @media (min-width: 768px) {
         main {
           width: 65%;
         }
       }
-
       @media (min-width: 992px) {
         main {
-          width: 50%;
+          width: 600px;
         }
+      }
+
+      svg {
+        width: 40px;
+        height: 40px;
+        fill: none;
+        stroke: var(--color-main);
+        stroke-width: 1px;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      h1::after,
+      h2::after {
+        content: "----------";
+        display: block;
+        font-size: 1rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.25rem;
+      }
+
+      a {
+        color: white;
+      }
+      a:visited {
+        color: rgb(123, 123, 123);
+      }
+
+      footer {
+        margin-bottom: 20px;
       }
     </style>
   </head>
   <body
-    style="
-      width: 100vw;
-      min-height: 100vh;
-      align-items: center;
-      padding: 0;
-      margin: 0;
-    "
-    class="light-theme"
+    style="min-height: 100vh; align-items: center; padding: 0; margin: 0;"
+    class="dark-theme"
   >
-    <header style="display: flex; justify-content: flex-end;">
-      <nav>
-        <a href="./my-public-notes.html">My public notes</a>
-      </nav>
-    </header>
     <main>
       <h1>Hi!</h1>
       <p>
@@ -66,17 +100,27 @@
         yourself at home.
       </p>
       <p>
-        This is a place where I share some info
-        <a href="#about-me">about me</a>, publish some of my tech related notes
-        (I plan on doing so, following the philosophy of learning in public) and
-        who knows what else.
+        I decided not to be a
+        <a target="_blank" href="https://www.youtube.com/watch?v=bdKZVIGRAKQ">
+          web peasant</a
+        >
+        anymore and get myself a piece of internet land, so here it is.
       </p>
-      <p id="about-me">
-        Oh, so by the way, my name is Kamil Kamiński and I'm a software
-        developer from Wrocław, Poland. Currently my area of expertise happens
-        to be React, Typescript, Node.js and web applications in general. Below
-        you can find some links.
+      <h2>About me</h2>
+      <p>
+        My name is Kamil Kamiński and I'm a software engineer from Wrocław,
+        Poland. <strong>Currently</strong> I happen to specialize in web
+        applications, specifically using React, Node and Typescript. You can
+        find my email and github link in the footer of the page.
       </p>
+      <h2>About this website</h2>
+      <p>
+        This is supposed to be a minimalistic website built with minimal set of
+        tools. I'm avoiding Javascript, trying to keep the stylesheet small and
+        keeping everything static - that's how hardcore I am.
+      </p>
+    </main>
+    <footer>
       <ul
         style="
           list-style-type: none;
@@ -87,37 +131,26 @@
         "
       >
         <li>
-          <a target="_blank" href="https://github.com/0ctothorp">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="100"
-              height="100"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
+          <a
+            target="_blank"
+            href="https://github.com/0ctothorp"
+            title="My github profile"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path
                 d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
               ></path>
             </svg>
           </a>
         </li>
+        <li style="width: 20px;"></li>
         <li>
-          <a href="mailto:kkaminski9311@gmail.com">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="100"
-              height="100"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
+          <a
+            target="_blank"
+            href="mailto:kkaminski1@protonmail.com"
+            title="email me at kkaminski1@protonmail.com"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path
                 d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
               ></path>
@@ -126,6 +159,6 @@
           </a>
         </li>
       </ul>
-    </main>
+    </footer>
   </body>
 </html>
