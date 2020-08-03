@@ -8,13 +8,12 @@
       :root {
         --color-dark-theme-background1: rgb(30, 30, 30);
         --color-dark-theme-background2: rgb(50, 50, 50);
-        --color-main-dark-theme: rgb(197, 197, 197);
-      }
+        --color-dark-theme-main: rgb(197, 197, 197);
 
-      .dark-theme {
-        --color-background1: var(--color-dark-theme-background1);
-        --color-background2: var(--color-dark-theme-background2);
-        --color-main: var(--color-main-dark-theme);
+        --color-light-theme-background1: rgb(254, 255, 206);
+        --color-light-theme-background2: rgb(255, 253, 231);
+        --color-light-theme-main: rgb(80, 80, 80);
+        --color-light-theme-dark-yellow: rgb(89, 90, 0);
       }
 
       * {
@@ -22,15 +21,14 @@
       }
 
       body {
-        background-color: var(--color-background1);
+        background-color: var(--color-dark-theme-background1);
         font-family: monospace;
-        color: var(--color-main);
+        color: var(--color-dark-theme-main);
         font-size: 16px;
       }
 
       main {
         width: 100%;
-        background-color: var(--color-background2);
         padding: 16px;
         margin-bottom: 20px;
       }
@@ -38,14 +36,16 @@
       @media (min-width: 576px) {
         main {
           width: 75%;
-          margin: 20px auto;
+          margin: 0 auto 20px auto;
         }
       }
+
       @media (min-width: 768px) {
         main {
           width: 65%;
         }
       }
+
       @media (min-width: 992px) {
         main {
           width: 600px;
@@ -56,7 +56,7 @@
         width: 40px;
         height: 40px;
         fill: none;
-        stroke: var(--color-main);
+        stroke: var(--color-dark-theme-main);
         stroke-width: 1px;
         stroke-linecap: round;
         stroke-linejoin: round;
@@ -87,12 +87,28 @@
       footer {
         margin-bottom: 20px;
       }
+
+      @media (prefers-color-scheme: light) {
+        body {
+          background-color: var(--color-light-theme-background2);
+          color: var(--color-light-theme-main);
+        }
+
+        a {
+          color: black;
+        }
+
+        a:visited {
+          color: var(--color-light-theme-dark-yellow);
+        }
+
+        svg {
+          stroke: var(--color-light-theme-main);
+        }
+      }
     </style>
   </head>
-  <body
-    style="min-height: 100vh; align-items: center; padding: 0; margin: 0;"
-    class="dark-theme"
-  >
+  <body style="min-height: 100vh; align-items: center; padding: 0; margin: 0;">
     <main>
       <h1>Hi!</h1>
       <p>
@@ -104,20 +120,21 @@
         <a target="_blank" href="https://www.youtube.com/watch?v=bdKZVIGRAKQ">
           web peasant</a
         >
-        anymore and get myself a piece of internet land, so here it is.
+        anymore and get myself a piece of internet land and build something on
+        it.
       </p>
       <h2>About me</h2>
       <p>
         My name is Kamil Kamiński and I'm a software engineer from Wrocław,
         Poland. <strong>Currently</strong> I happen to specialize in web
         applications, specifically using React, Node and Typescript. You can
-        find my email and github link in the footer of the page.
+        find more in the footer.
       </p>
       <h2>About this website</h2>
       <p>
         This is supposed to be a minimalistic website built with minimal set of
         tools. I'm avoiding Javascript, trying to keep the stylesheet small and
-        keeping everything static - that's how hardcore I am.
+        keeping everything static.
       </p>
     </main>
     <footer>
