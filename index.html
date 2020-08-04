@@ -30,13 +30,12 @@
       main {
         width: 100%;
         padding: 16px;
-        margin-bottom: 20px;
       }
 
       @media (min-width: 576px) {
         main {
           width: 75%;
-          margin: 0 auto 20px auto;
+          margin: auto;
         }
       }
 
@@ -114,6 +113,16 @@
           stroke: black;
         }
       }
+
+      .visually-hidden {
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+      }
     </style>
   </head>
   <body style="align-items: center; padding: 0; margin: 0;">
@@ -128,21 +137,14 @@
         <a target="_blank" href="https://www.youtube.com/watch?v=bdKZVIGRAKQ">
           web peasant</a
         >
-        anymore, get myself a piece of internet land and build something on it.
+        anymore and get myself a piece of internet land to build something on
+        it. It's pretty empty at the moment, but I've got some plans.
       </p>
       <h2>About me</h2>
       <p>
         My name is Kamil Kamiński and I'm a software engineer from Wrocław,
         Poland. <strong>Currently</strong> I happen to specialize in web
         applications, specifically using React, Typescript and Node.
-      </p>
-      <h2>About this website</h2>
-      <p>
-        This is supposed to be a minimalistic website built with minimal set of
-        tools. I'm avoiding Javascript, trying to keep the stylesheet small and
-        keeping everything static. No cookies, no tracking. In the future, I'd
-        like to generate pages with my public notes using a minimal shell
-        script.
       </p>
     </main>
     <footer>
@@ -161,7 +163,12 @@
             href="https://github.com/0ctothorp"
             title="My github profile"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <span class="visually-hidden">Github</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
               <path
                 d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
               ></path>
@@ -175,7 +182,12 @@
             href="mailto:kkaminski1@protonmail.com"
             title="email me at kkaminski1@protonmail.com"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <span class="visually-hidden">Email me</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
               <path
                 d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
               ></path>
