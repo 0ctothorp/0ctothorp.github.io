@@ -77,15 +77,20 @@
         font-size: 1.25rem;
       }
 
-      a {
-        color: white;
-      }
       a:visited {
-        color: rgb(123, 123, 123);
+        color: var(--color-dark-theme-main);
+      }
+      a,
+      a:hover {
+        color: white;
       }
 
       footer {
         margin-bottom: 20px;
+      }
+
+      a:hover svg {
+        stroke: white;
       }
 
       @media (prefers-color-scheme: light) {
@@ -93,22 +98,25 @@
           background-color: var(--color-light-theme-background2);
           color: var(--color-light-theme-main);
         }
-
-        a {
-          color: black;
-        }
-
         a:visited {
-          color: var(--color-light-theme-dark-yellow);
+          color: var(--color-light-theme-main);
+        }
+        a,
+        a:hover {
+          color: black;
         }
 
         svg {
           stroke: var(--color-light-theme-main);
         }
+
+        a:hover svg {
+          stroke: black;
+        }
       }
     </style>
   </head>
-  <body style="min-height: 100vh; align-items: center; padding: 0; margin: 0;">
+  <body style="align-items: center; padding: 0; margin: 0;">
     <main>
       <h1>Hi!</h1>
       <p>
@@ -120,21 +128,21 @@
         <a target="_blank" href="https://www.youtube.com/watch?v=bdKZVIGRAKQ">
           web peasant</a
         >
-        anymore and get myself a piece of internet land and build something on
-        it.
+        anymore, get myself a piece of internet land and build something on it.
       </p>
       <h2>About me</h2>
       <p>
         My name is Kamil Kamiński and I'm a software engineer from Wrocław,
         Poland. <strong>Currently</strong> I happen to specialize in web
-        applications, specifically using React, Node and Typescript. You can
-        find more in the footer.
+        applications, specifically using React, Typescript and Node.
       </p>
       <h2>About this website</h2>
       <p>
         This is supposed to be a minimalistic website built with minimal set of
         tools. I'm avoiding Javascript, trying to keep the stylesheet small and
-        keeping everything static.
+        keeping everything static. No cookies, no tracking. In the future, I'd
+        like to generate pages with my public notes using a minimal shell
+        script.
       </p>
     </main>
     <footer>
