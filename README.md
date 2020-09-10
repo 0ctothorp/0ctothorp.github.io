@@ -1,3 +1,3 @@
 # My own piece of the internet
 
-[kamilkaminski.dev](kamilkaminski.dev)
+[kamilkaminski.dev](https://kamilkaminski.dev)
