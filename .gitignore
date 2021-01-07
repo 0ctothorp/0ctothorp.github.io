@@ -1,2 +1,7 @@
 # vim
 *.swp
+
+.cache
+yarn-error.log
+node_modules
+
