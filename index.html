@@ -88,7 +88,8 @@
         margin-bottom: 20px;
       }
 
-      a:hover svg {
+      a:hover svg,
+      .email:hover svg {
         stroke: white;
       }
 
@@ -123,28 +124,56 @@
         white-space: nowrap;
         width: 1px;
       }
+
+      .email {
+        position: relative;
+      }
+
+      label[for="email-toggle"] {
+        cursor: pointer;
+      }
+
+      #email-toggle ~ label::before,
+      #email-toggle ~ label::after {
+        position: absolute;
+        bottom: -1em;
+        left: 50%;
+      }
+
+      #email-toggle:checked ~ label::before {
+        content: "kkaminski9311";
+        transform: translate(-100%);
+      }
+
+      #email-toggle:checked ~ label::after {
+        content: "@gmail.com";
+      }
     </style>
   </head>
-  <body style="align-items: center; padding: 0; margin: 0;">
+  <body style="align-items: center; padding: 0; margin: 0">
     <main>
       <h1>Hi!</h1>
       <p>
         Welcome to my internet property. Take your digital shoes off and make
         yourself at home.
       </p>
+      <h2>Writing</h2>
       <p>
-        I decided not to be a
-        <a target="_blank" href="https://www.youtube.com/watch?v=bdKZVIGRAKQ">
-          web peasant</a
+        I wrote something of a blogpost:
+        <a
+          href="https://hungry-midnight-212.notion.site/Auto-sized-modal-with-scrollable-content-28ee5d47910a4741adaf0401d15ee14f"
+          target="_blank"
         >
-        anymore and get myself a piece of internet land to build something on
-        it. It's pretty empty at the moment, but I've got some plans.
+          Auto-sized modal with scrollable content
+        </a>
       </p>
       <h2>About me</h2>
       <p>
         My name is Kamil Kamiński and I'm a software engineer from Wrocław,
         Poland. <strong>Currently</strong> I happen to specialize in web
-        applications, specifically using React, Typescript and Node.
+        applications, specifically using React, Typescript and Node. In some
+        free time I play with Unity game engine or more web programming. My
+        other interests include music and bikes.
       </p>
     </main>
     <footer>
@@ -175,25 +204,23 @@
             </svg>
           </a>
         </li>
-        <li style="width: 20px;"></li>
+        <li style="width: 20px"></li>
         <li>
-          <a
-            target="_blank"
-            href="mailto:kkaminski1@protonmail.com"
-            title="email me at kkaminski1@protonmail.com"
-          >
-            <span class="visually-hidden">Email me</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-              ></path>
-              <polyline points="22,6 12,13 2,6"></polyline>
-            </svg>
-          </a>
+          <div class="email">
+            <input id="email-toggle" class="visually-hidden" type="checkbox" />
+            <label for="email-toggle">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                ></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </label>
+          </div>
         </li>
       </ul>
     </footer>
