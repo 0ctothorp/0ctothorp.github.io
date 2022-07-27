@@ -132,22 +132,34 @@
 
       label[for="email-toggle"] {
         cursor: pointer;
+        position: relative;
       }
 
-      #email-toggle ~ label::before,
-      #email-toggle ~ label::after {
+      #email-toggle ~ label {
+        display: flex;
+        align-items: center;
+      }
+
+      #email-content {
+        transform: scaleX(0) translateY(-50%);
+        transform-origin: left center;
+        transition: transform 0.2s;
         position: absolute;
-        bottom: -1em;
-        left: 50%;
+        left: 100%;
+        top: 50%;
       }
 
-      #email-toggle:checked ~ label::before {
-        content: "kkaminski9311";
-        transform: translate(-100%);
+      #email-toggle:checked ~ label #email-content {
+        transform: scaleX(1) translateY(-50%);
       }
 
-      #email-toggle:checked ~ label::after {
-        content: "@gmail.com";
+      #email-content span {
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+
+      #email-toggle:checked ~ label #email-content span {
+        opacity: 1;
       }
     </style>
   </head>
@@ -172,9 +184,9 @@
       <p>
         My name is Kamil Kamiński and I'm a software engineer from Wrocław,
         Poland. <strong>Currently</strong> I happen to specialize in web
-        applications, specifically using React, Typescript and Node. In some
-        free time I play with Unity game engine or more web programming. My
-        other interests include music and bikes.
+        applications, specifically using React, Typescript and Node. In free
+        time I play with Unity game engine or more web programming. My other
+        interests include music and bikes.
       </p>
     </main>
     <footer>
@@ -220,6 +232,7 @@
                 ></path>
                 <polyline points="22,6 12,13 2,6"></polyline>
               </svg>
+              <div id="email-content"><span>kkaminski9311@gmail.com</span></div>
             </label>
           </div>
         </li>
