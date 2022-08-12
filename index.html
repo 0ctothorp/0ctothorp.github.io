@@ -156,10 +156,38 @@
       #email-content span {
         opacity: 0;
         transition: opacity 0.2s;
+        margin-left: 0.4em;
       }
 
       #email-toggle:checked ~ label #email-content span {
         opacity: 1;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .saved-to-clipboard {
+        position: absolute;
+        bottom: 0;
+        width: max-content;
+        left: 50%;
+        transform: translate(-50%, 100%);
+        color: #00c700;
+        font-size: 0.8em;
+        animation: clipboard 2s 0.2s;
+        opacity: 0;
+      }
+
+      @keyframes clipboard {
+        0% {
+          transform: translate(-50%, 150%);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, 75%);
+          opacity: 0;
+        }
       }
     </style>
   </head>
@@ -171,22 +199,29 @@
         yourself at home.
       </p>
       <h2>Writing</h2>
-      <p>
-        I wrote something of a blogpost:
-        <a
-          href="https://hungry-midnight-212.notion.site/Auto-sized-modal-with-scrollable-content-28ee5d47910a4741adaf0401d15ee14f"
-          target="_blank"
-        >
-          Auto-sized modal with scrollable content
-        </a>
-      </p>
+      <p>I compiled 2 of my notes into blogposts:</p>
+      <ul>
+        <li>
+          <a
+            href="https://hungry-midnight-212.notion.site/Pausable-and-reversible-SVG-SMIL-animations-4bc0e96b570d48818cc486ec2c4d1aa8"
+            target="_blank"
+            >Pausable and reversible SVG SMIL animations</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://hungry-midnight-212.notion.site/Auto-sized-modal-with-scrollable-content-28ee5d47910a4741adaf0401d15ee14f"
+            target="_blank"
+          >
+            Auto-sized modal with scrollable content
+          </a>
+        </li>
+      </ul>
       <h2>About me</h2>
       <p>
-        My name is Kamil Kamiński and I'm a software engineer from Wrocław,
-        Poland. <strong>Currently</strong> I happen to specialize in web
-        applications, specifically using React, Typescript and Node. In free
-        time I play with Unity game engine or more web programming. My other
-        interests include music and bikes.
+        My name is Kamil and I'm a software engineer from Wrocław, Poland.
+        <strong>Currently</strong> I happen to specialize in web applications,
+        specifically using React, Typescript and Node.
       </p>
     </main>
     <footer>
@@ -232,11 +267,31 @@
                 ></path>
                 <polyline points="22,6 12,13 2,6"></polyline>
               </svg>
-              <div id="email-content"><span>kkaminski9311@gmail.com</span></div>
+              <div id="email-content">
+                <span>kkaminski9311@gmail.com</span>
+                <div class="hidden saved-to-clipboard">saved to clipboard</div>
+              </div>
             </label>
           </div>
         </li>
       </ul>
     </footer>
+    <script>
+      const input = document.querySelector("#email-toggle");
+      const saved = document.querySelector(".saved-to-clipboard");
+      let timeout;
+      input.onchange = (e) => {
+        if (e.target.checked) {
+          navigator.clipboard.writeText("kkaminski9311@gmail.com");
+          saved.classList.remove("hidden");
+          timeout = setTimeout(() => {
+            saved.classList.add("hidden");
+          }, 1800);
+        } else {
+          clearTimeout(timeout);
+          saved.classList.add("hidden");
+        }
+      };
+    </script>
   </body>
 </html>
