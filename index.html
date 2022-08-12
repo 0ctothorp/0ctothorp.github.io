@@ -156,10 +156,27 @@
       #email-content span {
         opacity: 0;
         transition: opacity 0.2s;
+        margin-left: 0.5em;
       }
 
       #email-toggle:checked ~ label #email-content span {
         opacity: 1;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      #email-svg {
+        fill: transparent;
+        transition: fill 0.35s 0.2s;
+        max-height: 100%;
+        max-width: 300px;
+        stroke-width: 0.2em;
+      }
+
+      #email-svg.active {
+        fill: green;
       }
     </style>
   </head>
@@ -222,103 +239,89 @@
           <div class="email">
             <input id="email-toggle" class="visually-hidden" type="checkbox" />
             <label for="email-toggle">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 100 100"
-                id="svg"
-              >
-                <rect
-                  x="2"
-                  y="15"
-                  width="96"
-                  height="70"
-                  rx="10"
-                  ry="10"
-                  stroke="white"
+              <div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 100 100"
+                  id="email-svg"
                 >
-                  <animate
-                    attributeName="rx"
-                    to="48"
-                    dur="0.5s"
-                    begin="svg.click"
-                    fill="freeze"
-                  />
-                  <animate
-                    attributeName="ry"
-                    to="48"
-                    dur="0.5s"
-                    begin="svg.click"
-                    fill="freeze"
-                  />
-                  <!-- <animate
-                    attributeName="rx"
-                    to="10"
-                    dur="0.5s"
-                    begin="svg.click"
-                    fill="freeze"
-                  />
-                  <animate
-                    attributeName="ry"
-                    to="10"
-                    dur="0.5s"
-                    begin="svg.click"
-                    fill="freeze"
-                  /> -->
-                  <animate
-                    attributeName="height"
-                    to="96"
-                    dur="0.5s"
-                    begin="svg.click"
-                    fill="freeze"
-                  />
-                  <!-- <animate
-                    attributeName="height"
-                    to="70"
-                    dur="0.5s"
-                    begin="svg.click"
-                    fill="freeze"
-                  /> -->
-                  <animate
-                    attributeName="y"
-                    to="2"
-                    dur="0.5s"
-                    begin="svg.click"
-                    fill="freeze"
-                  />
-                  <!-- <animate
-                    attributeName="y"
-                    to="15"
-                    dur="0.5s"
-                    begin="svg.click"
-                    fill="freeze"
-                  /> -->
-                </rect>
-                <polyline
-                  points="2,25 50,50 98,25"
-                  stroke="white"
-                  fill="transparent"
-                >
-                  <animate
-                    attributeName="points"
-                    to="25,55 45,70 80,35"
-                    dur="0.5s"
-                    begin="svg.click"
-                    fill="freeze"
-                  />
-                  <!-- <animate
-                    attributeName="points"
-                    to="2,25 50,50 98,25"
-                    dur="0.5s"
-                    begin="svg.click"
-                    fill="freeze"
-                  /> -->
-                </polyline>
-              </svg>
+                  <rect
+                    x="2"
+                    y="15"
+                    width="96"
+                    height="70"
+                    rx="10"
+                    ry="10"
+                    stroke="white"
+                  >
+                    <animate
+                      attributeName="rx"
+                      begin="indefinite"
+                      keyTimes="0;0.5;1"
+                      values="10;48;10"
+                      dur="1s"
+                    />
+                    <animate
+                      attributeName="ry"
+                      begin="indefinite"
+                      keyTimes="0;0.5;1"
+                      values="10;48;10"
+                      dur="1s"
+                    />
+                    <animate
+                      attributeName="height"
+                      begin="indefinite"
+                      keyTimes="0;0.5;1"
+                      values="70;96;70"
+                      dur="1s"
+                    />
+                    <animate
+                      attributeName="y"
+                      begin="indefinite"
+                      keyTimes="0;0.5;1"
+                      values="15;2;15"
+                      dur="1s"
+                    />
+                  </rect>
+                  <polyline
+                    points="2,25 50,50 98,25"
+                    stroke="white"
+                    fill="transparent"
+                  >
+                    <animate
+                      attributeName="points"
+                      begin="indefinite"
+                      keyTimes="0;0.5;1"
+                      values="2,25 50,50 98,25;25,55 45,70 80,35;2,25 50,50 98,25"
+                      dur="1s"
+                    />
+                  </polyline>
+                </svg>
+              </div>
               <div id="email-content"><span>kkaminski9311@gmail.com</span></div>
             </label>
           </div>
         </li>
       </ul>
     </footer>
+    <script>
+      const emailToggle = document.querySelector('label[for="email-toggle"]');
+      const svg = emailToggle.querySelector("svg");
+      const a = svg.querySelectorAll("animate[attributeName]");
+
+      let toggle = false;
+
+      emailToggle.onclick = () => {
+        toggle = !toggle;
+        if (toggle) {
+          for (const x of a) x.beginElement();
+          setTimeout(svg.pauseAnimations.bind(svg), 500);
+          svg.classList.add("active");
+        } else {
+          svg.unpauseAnimations();
+          svg.classList.remove("active");
+        }
+      };
+    </script>
   </body>
 </html>
