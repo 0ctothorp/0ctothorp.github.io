@@ -1,0 +1,105 @@
+---
+//
+---
+
+<div class="email relative">
+  <input id="email-toggle" class="sr-only" type="checkbox" />
+  <label for="email-toggle" class="cursor-pointer relative flex items-center">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      class="w-10 h-10 fill-none stroke-white stroke-[1px]"
+    >
+      <path
+        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+      ></path>
+      <polyline points="22,6 12,13 2,6"></polyline>
+    </svg>
+    <div
+      id="email-content"
+      class:list={[
+        "scale-x-0",
+        "-translate-y-1/2",
+        "origin-[left_center]",
+        "transition-transform",
+        "duration-200",
+        "absolute",
+        "left-full",
+        "top-1/2",
+      ]}
+    >
+      <span class="text-white">kkaminski9311@gmail.com</span>
+      <div class="hidden saved-to-clipboard">saved to clipboard</div>
+    </div>
+  </label>
+</div>
+
+<script>
+  const input = document.querySelector("#email-toggle") as HTMLInputElement;
+  const saved = document.querySelector(".saved-to-clipboard") as HTMLDivElement;
+  const email = document.querySelector(
+    "#email-content span"
+  ) as HTMLSpanElement;
+  let timeout: number;
+  input.onchange = (e) => {
+    if ((e.target as HTMLInputElement).checked) {
+      navigator.clipboard.writeText(email.textContent!);
+      saved.classList.remove("hidden");
+      timeout = window.setTimeout(() => {
+        saved.classList.add("hidden");
+      }, 1800);
+    } else {
+      clearTimeout(timeout);
+      saved.classList.add("hidden");
+    }
+  };
+</script>
+
+<style>
+  svg {
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .email:hover svg {
+    stroke: white;
+  }
+
+  #email-toggle:checked ~ label #email-content {
+    transform: scaleX(1) translateY(-50%);
+  }
+
+  #email-content span {
+    opacity: 0;
+    transition: opacity 0.2s;
+    margin-left: 0.4em;
+  }
+
+  #email-toggle:checked ~ label #email-content span {
+    opacity: 1;
+  }
+
+  .saved-to-clipboard {
+    position: absolute;
+    bottom: 0;
+    width: max-content;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    color: #00c700;
+    font-size: 0.8em;
+    animation: clipboard 2s 0.2s;
+    opacity: 0;
+  }
+
+  @keyframes clipboard {
+    0% {
+      transform: translate(-50%, 150%);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, 75%);
+      opacity: 0;
+    }
+  }
+</style>

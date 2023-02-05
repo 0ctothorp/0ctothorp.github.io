@@ -1,0 +1,92 @@
+---
+import { Picture } from "@astrojs/image/components";
+import BaseHead from "../components/BaseHead.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+import img from "../assets/voices.png";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <style>
+      .gradient {
+        background: rgb(10, 9, 8);
+        background: linear-gradient(
+          0deg,
+          rgba(10, 9, 8, 1) 0%,
+          rgba(10, 9, 8, 1) 65%,
+          rgba(255, 255, 255, 0) 80%
+        );
+      }
+      #play {
+        clip-path: polygon(10% 10%, 90% 50%, 90% 50%, 10% 90%);
+        background-color: rgba(255, 255, 255, 0.4);
+        -webkit-backdrop-filter: blur(3px);
+        backdrop-filter: blur(3px);
+        transition: clip-path 1s, width 1s 1s, height 1s 1s,
+          opacity 300ms ease-in, background-color 1s;
+      }
+
+      #play.expanded {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.6);
+      }
+    </style>
+  </head>
+  <body class="bg-[#0a0908]">
+    <div class="grid grid-cols-[1fr_2fr_1fr] h-screen">
+      <div></div>
+      <div class="relative flex justify-center items-center">
+        <Picture
+          src={img}
+          widths={[512, 1024]}
+          sizes="(max-width: 1199px) 512px, 1024px"
+          alt="pic"
+          class="max-h-screen"
+        />
+        <div id="play-button-hover-zone" class="absolute w-3/4 h-3/4">
+          <div class="w-full h-full flex items-center justify-center">
+            <div id="play" class="w-36 h-36 opacity-0 absolute">
+              <div id="youtube-embed-wrapper" class="opacity-0 transition-opacity duration-200 w-full h-full flex flex-col">
+                <div class="grid place-items-center flex-grow">
+                  <iframe src="https://www.youtube-nocookie.com/embed/c8Gsh5oOWNE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <button class="text-6xl text-white mx-auto my-2">X</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div></div>
+    </div>
+    <script>
+
+      const play = document.querySelector("#play") as HTMLDivElement;
+      const hoverZone = document.querySelector(
+        "#play-button-hover-zone"
+      ) as HTMLDivElement;
+      const embedWrapper = document.querySelector('#youtube-embed-wrapper') as HTMLDivElement;
+
+      play.onclick = () => {
+        play.classList.add("expanded");
+        setTimeout(() => {
+          embedWrapper.style.opacity = '1';
+        }, 2001);
+      };
+
+      hoverZone.onmouseenter = () => {
+        play.style.opacity = '1';
+      };
+
+      hoverZone.onmouseleave = () => {
+        if (play.classList.contains("expanded")) return;
+        // @ts-ignore
+        delete play.style.opacity;
+      };
+    </script>
+  </body>
+</html>
