@@ -57,9 +57,9 @@ import img from "../assets/voices.png";
               >
                 <div
                   id="iframe-wrapper"
-                  class="flex-grow p-[2%] "
+                  class="p-[2%] overflow-hidden"
                 >
-                <div id="player-wrapper" class="aspect-video">
+                <div id="player-wrapper" class="aspect-video overflow-hidden max-h-full m-auto">
                 </div>
                   
                 </div>
@@ -99,7 +99,6 @@ import img from "../assets/voices.png";
         play.classList.add("expanded");
         await wait(2001);
         const { width, height } = playerWrapper.getBoundingClientRect();
-        // aspect ratio!
         playerWrapper.innerHTML = `<iframe width=${Math.floor(
           width
         )} height=${Math.floor(
