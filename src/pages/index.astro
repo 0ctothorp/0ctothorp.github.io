@@ -50,10 +50,18 @@ import img from "../assets/voices.png";
         />
         <div id="play-button-hover-zone" class="absolute w-3/4 h-3/4">
           <div class="w-full h-full flex items-center justify-center">
-            <div id="play" class="w-36 h-36 opacity-0 absolute">
-              <div id="youtube-embed-wrapper" class="opacity-0 transition-opacity duration-200 w-full h-full flex flex-col">
-                <div class="grid place-items-center flex-grow">
-                  <iframe src="https://www.youtube-nocookie.com/embed/c8Gsh5oOWNE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <div id="play" class="w-36 h-36 opacity-0 absolute overflow-hidden">
+              <div
+                id="youtube-embed-wrapper"
+                class="opacity-0 transition-opacity duration-300 w-full h-full flex flex-col"
+              >
+                <div
+                  id="iframe-wrapper"
+                  class="flex-grow p-[2%] "
+                >
+                <div id="player-wrapper" class="aspect-video">
+                </div>
+                  
                 </div>
                 <button class="text-6xl text-white mx-auto my-2">X</button>
               </div>
@@ -64,28 +72,62 @@ import img from "../assets/voices.png";
       <div></div>
     </div>
     <script>
-
+      import { wait } from "../utils";
       const play = document.querySelector("#play") as HTMLDivElement;
       const hoverZone = document.querySelector(
         "#play-button-hover-zone"
       ) as HTMLDivElement;
-      const embedWrapper = document.querySelector('#youtube-embed-wrapper') as HTMLDivElement;
-
-      play.onclick = () => {
-        play.classList.add("expanded");
-        setTimeout(() => {
-          embedWrapper.style.opacity = '1';
-        }, 2001);
-      };
 
       hoverZone.onmouseenter = () => {
-        play.style.opacity = '1';
+        play.style.opacity = "1";
       };
 
       hoverZone.onmouseleave = () => {
         if (play.classList.contains("expanded")) return;
         // @ts-ignore
         delete play.style.opacity;
+      };
+
+      const embedWrapper = document.querySelector(
+        "#youtube-embed-wrapper"
+      ) as HTMLDivElement;
+      const playerWrapper = document.querySelector(
+        "#player-wrapper"
+      ) as HTMLDivElement;
+
+      play.onclick = async () => {
+        play.classList.add("expanded");
+        await wait(2001);
+        const { width, height } = playerWrapper.getBoundingClientRect();
+        // aspect ratio!
+        playerWrapper.innerHTML = `<iframe width=${Math.floor(
+          width
+        )} height=${Math.floor(
+          height
+        )} src="https://www.youtube-nocookie.com/embed/c8Gsh5oOWNE?enablejsapi" title="Voices From the Abyss" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+
+        var tag = document.createElement("script");
+        tag.id = "iframe";
+
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName("script")[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // let player;
+        window.onYouTubeIframeAPIReady = () => {
+          new YT.Player("iframe", {
+            events: {
+              onReady: onPlayerReady,
+            },
+          });
+        };
+
+        function onPlayerReady(event) {
+          console.log("sup?");
+          embedWrapper.style.opacity = "1";
+          console.log(event.target)
+          event.target.playVideo();
+        }
       };
     </script>
   </body>
