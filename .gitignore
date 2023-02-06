@@ -1,2 +1,6 @@
 # vim
 *.swp
+
+node_modules
+dist
+.astro
