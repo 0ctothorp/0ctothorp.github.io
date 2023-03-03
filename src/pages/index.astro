@@ -1,8 +1,13 @@
 ---
 import { Picture } from "@astrojs/image/components";
+import { Icon } from "astro-icon";
 
-import img from "../assets/voices.png";
 import Layout from "../layouts/Layout.astro";
+import img from "../assets/voices.png";
+
+// TODO:
+// Odtwarzacz powinien być w osobnym fixed elemencie, a nie w środku animowanego play buttona.
+// To ułatwi mi reużycie tych samych elementów na mobile.
 ---
 
 <Layout>
@@ -12,7 +17,7 @@ import Layout from "../layouts/Layout.astro";
       background: linear-gradient(
         0deg,
         rgba(10, 9, 8, 1) 0%,
-        /* rgba(10, 9, 8, 1) 65%, */ rgba(255, 255, 255, 0) 80%
+        rgba(255, 255, 255, 0) 80%
       );
     }
     #play {
@@ -34,25 +39,51 @@ import Layout from "../layouts/Layout.astro";
         background-color 1s, transform 1s 1.3s;
     }
 
+    #play.expanded,
     #play.shrinking {
-      transition: transform 1s, width 1s 0.3s, height 1s 0.3s, clip-path 1s 1.3s, opacity 300ms ease-in,
-        background-color 1s 1.3s;
+      opacity: 1;
+    }
+
+    #play.shrinking {
+      transition: transform 1s, width 1s 0.3s, height 1s 0.3s, clip-path 1s 1.3s,
+        opacity 300ms ease-in, background-color 1s 1.3s;
+    }
+
+    #play-button-hover-zone:hover #play:not(.expanded) {
+      opacity: 1;
     }
   </style>
 
   <div class="">
     <div
-      class="relative flex justify-center items-center overflow-hidden h-[300px]"
+      class:list={[
+        "relative",
+        "overflow-hidden",
+        "flex justify-center items-center",
+        "h-[200px] sm:h-[300px]",
+      ]}
     >
       <Picture
         src={img}
         widths={[512, 1024]}
-        sizes="(max-width: 1199px) 512px, 1024px"
+        sizes="(max-width: 640px) 512px, 1024px"
         alt="pic"
       />
       <div class="gradient h-full absolute inset-0"></div>
       <div id="play-button-hover-zone" class="absolute inset-0">
-        <div id="play" class="w-36 h-36 opacity-0 fixed overflow-hidden">
+        <div
+          id="play"
+          class:list={[
+            "w-28",
+            "h-28",
+            "sm:w-36",
+            "sm:h-36",
+            "opacity-0",
+            "fixed",
+            "overflow-hidden",
+            "hover:cursor-pointer",
+          ]}
+        >
           <div
             id="youtube-embed-wrapper"
             class="opacity-0 transition-opacity duration-500 w-full h-full flex flex-col"
@@ -64,8 +95,10 @@ import Layout from "../layouts/Layout.astro";
               >
               </div>
             </div>
-            <button type="button" class="text-6xl text-white mx-auto my-2 pointer-events-none"
-              >X</button
+            <button
+              type="button"
+              class="text-white mx-auto my-2 pointer-events-none w-9"
+              ><Icon name="vaadin:close" /></button
             >
           </div>
         </div>
@@ -74,19 +107,8 @@ import Layout from "../layouts/Layout.astro";
   </div>
   <script>
     import { wait } from "../utils";
+
     const play = document.querySelector("#play") as HTMLDivElement;
-    const hoverZone = document.querySelector(
-      "#play-button-hover-zone"
-    ) as HTMLDivElement;
-
-    hoverZone.onmouseenter = () => {
-      play.style.opacity = "1";
-    };
-
-    hoverZone.onmouseleave = () => {
-      if (play.classList.contains("expanded") || play.classList.contains('shrinking')) return;
-      play.style.opacity = '0';
-    };
 
     const embedWrapper = document.querySelector(
       "#youtube-embed-wrapper"
@@ -95,39 +117,49 @@ import Layout from "../layouts/Layout.astro";
       "#player-wrapper"
     ) as HTMLDivElement;
 
-    const closeButton = embedWrapper.querySelector("button");
+    const closeButton = embedWrapper.querySelector("button")!;
 
     play.onclick = async () => {
-      if (play.classList.contains("expanded")) {
-        return;
-      }
+      if (play.classList.contains("expanded")) return;
+
+      play.classList.remove("hover:cursor-pointer");
       play.classList.add("expanded");
+
       await wait(2001);
+
       const { width, height } = playerWrapper.getBoundingClientRect();
-      playerWrapper.innerHTML = `<iframe width=${Math.floor(
-        width
-      )} height=${Math.floor(
-        height
-      )} src="https://www.youtube-nocookie.com/embed/c8Gsh5oOWNE?autoplay=1&enablejsapi=1&modestbranding=1&rel=0" title="Voices From the Abyss" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+
+      playerWrapper.innerHTML = `
+        <iframe 
+          width=${Math.floor(width)} 
+          height=${Math.floor(height)} 
+          src="https://www.youtube-nocookie.com/embed/c8Gsh5oOWNE?autoplay=1&enablejsapi=1&modestbranding=1&rel=0" 
+          title="Voices From the Abyss" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen>
+        </iframe>`;
 
       await wait(100);
-      embedWrapper.style.opacity = "1";
 
-      closeButton.classList.add('pointer-events-auto');
+      embedWrapper.style.opacity = "1";
+      closeButton.classList.add("pointer-events-auto");
     };
 
-    closeButton!.onclick = async (e) => {
+    closeButton.onclick = async (e) => {
       e.stopPropagation();
-      play.classList.remove("expanded");
-      play.classList.add('shrinking');
-      play.dataset.shrinking = '1';
-      playerWrapper.innerHTML = '';
-      embedWrapper.style.opacity = '0';
 
-      closeButton.classList.add('pointer-events-none');
+      play.classList.remove("expanded");
+      play.classList.add("shrinking", "hover:cursor-pointer");
+      play.dataset.shrinking = "1";
+
+      playerWrapper.innerHTML = "";
+      embedWrapper.style.opacity = "0";
+      closeButton.classList.remove("pointer-events-auto");
+
       await wait(2300);
-      play.classList.remove('shrinking');
-      play.style.opacity = '0';
+
+      play.classList.remove("shrinking");
     };
   </script>
 </Layout>
