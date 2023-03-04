@@ -4,10 +4,21 @@ import { Icon } from "astro-icon";
 
 import Layout from "../layouts/Layout.astro";
 import img from "../assets/voices.png";
+import Footer from "../components/Footer.astro";
+
+// TODO: Na mobile w orientacji pionowej, wyświetlanie filmiku nad backdropem
+// zajmującym cały viewport nie ma sensu. Zamiast tego po prostu cały header mógłby być
+// iframem z filmem i ew. być sticky, gdyby na stronie było tyle treści, żeby było co
+// scrollować. W orientacji poziomej może to działać jak na kompie.
+// Właściwie, na kompie też zamiast wyświetlać film nad całą stroną, to mógłbym
+// wyświetlić go w małym pływającym okienku, żeby dało się w międzyczasie przeglądać stronę
+
+// TODO: Dodać placeholder na czas ładowania obrazka w headerze.
+
+// TODO: Try out windi or unocss.
 
 // TODO:
-// Odtwarzacz powinien być w osobnym fixed elemencie, a nie w środku animowanego play buttona.
-// To ułatwi mi reużycie tych samych elementów na mobile.
+// 1. Style links and hovers
 ---
 
 <Layout>
@@ -20,12 +31,12 @@ import img from "../assets/voices.png";
         rgba(255, 255, 255, 0) 80%
       );
     }
+
     #play {
       clip-path: polygon(10% 10%, 90% 50%, 90% 50%, 10% 90%);
       background-color: rgba(255, 255, 255, 0.4);
       -webkit-backdrop-filter: blur(3px);
       backdrop-filter: blur(3px);
-      transform: translate(calc(50vw - 50%), calc(150px - 50%));
       transition: opacity 300ms ease-in;
     }
 
@@ -39,22 +50,28 @@ import img from "../assets/voices.png";
         background-color 1s, transform 1s 1.3s;
     }
 
-    #play.expanded,
-    #play.shrinking {
-      opacity: 1;
-    }
-
     #play.shrinking {
       transition: transform 1s, width 1s 0.3s, height 1s 0.3s, clip-path 1s 1.3s,
         opacity 300ms ease-in, background-color 1s 1.3s;
     }
 
-    #play-button-hover-zone:hover #play:not(.expanded) {
-      opacity: 1;
+    @media (hover: hover) and (pointer: fine) {
+      #play {
+        opacity: 0;
+      }
+
+      #play.expanded,
+      #play.shrinking {
+        opacity: 1;
+      }
+
+      #play-button-hover-zone:hover #play:not(.expanded) {
+        opacity: 1;
+      }
     }
   </style>
 
-  <div class="">
+  <header>
     <div
       class:list={[
         "relative",
@@ -74,53 +91,112 @@ import img from "../assets/voices.png";
         <div
           id="play"
           class:list={[
-            "w-28",
-            "h-28",
-            "sm:w-36",
-            "sm:h-36",
-            "opacity-0",
-            "fixed",
-            "overflow-hidden",
-            "hover:cursor-pointer",
+            "w-28 sm:w-36",
+            "h-28 sm:h-36",
+            "fixed overflow-hidden hover:cursor-pointer",
+            "translate-x-[calc(50vw-50%)] translate-y-[calc(100px-50%)]",
+            "sm:translate-y-[calc(150px-50%)]",
           ]}
         >
-          <div
-            id="youtube-embed-wrapper"
-            class="opacity-0 transition-opacity duration-500 w-full h-full flex flex-col"
-          >
-            <div id="iframe-wrapper" class="p-[2%] overflow-hidden">
-              <div
-                id="player-wrapper"
-                class="aspect-video overflow-hidden max-h-full m-auto"
-              >
-              </div>
-            </div>
-            <button
-              type="button"
-              class="text-white mx-auto my-2 pointer-events-none w-9"
-              ><Icon name="vaadin:close" /></button
-            >
-          </div>
         </div>
       </div>
     </div>
+  </header>
+
+  <main class:list={["w-11/12 sm:w-[55ch] m-auto pt-10 space-y-10 text-lg"]}>
+    <p>Hi 👋 My name is Kamil and this is my cyber space.</p>
+    <p>
+      I develop software by day and make <a
+        href="https://www.youtube.com/playlist?list=PLTDp1OhlEKi4__NYsuHAlPZ680wBbF_to"
+        >music</a
+      > by night.
+    </p>
+    <p>
+      I sometimes publish some of my notes. I'll build a proper blog here one
+      day.
+    </p>
+
+    <style>
+      #articles > li {
+        padding-left: 2rem;
+        text-indent: -2rem;
+      }
+
+      #articles > li::before {
+        content: "👉 ";
+      }
+    </style>
+
+    <ul id="articles" class:list={["list-inside"]}>
+      <li>
+        <a
+          href="https://hungry-midnight-212.notion.site/Contain-an-aspect-ratio-element-inside-a-parent-with-just-CSS-31eb84dada8446fc88bb222bf0cf5daf"
+          target="_blank"
+          >Contain an aspect-ratio element inside a parent with just CSS</a
+        >
+      </li>
+      <li>
+        <a
+          href="https://hungry-midnight-212.notion.site/Pausable-and-reversible-SVG-SMIL-animations-4bc0e96b570d48818cc486ec2c4d1aa8"
+          target="_blank">Pausable and reversible SVG SMIL animations</a
+        >
+      </li>
+      <li>
+        <a
+          href="https://hungry-midnight-212.notion.site/Auto-sized-modal-with-scrollable-content-28ee5d47910a4741adaf0401d15ee14f"
+          target="_blank"
+        >
+          Auto-sized modal with scrollable content
+        </a>
+      </li>
+    </ul>
+  </main>
+
+  <Footer />
+
+  <div
+    id="youtube-embed-wrapper"
+    class:list={[
+      "fixed inset-0 -z-10",
+      "w-full h-full",
+      "flex flex-col",
+      "opacity-0 transition-opacity duration-500",
+    ]}
+  >
+    <div id="iframe-wrapper" class="p-[2%] overflow-hidden">
+      <div
+        id="player-wrapper"
+        class="aspect-video overflow-hidden max-h-full m-auto"
+      >
+      </div>
+    </div>
+    <button
+      type="button"
+      class="text-white mx-auto my-2 pointer-events-none w-9"
+    >
+      <Icon name="vaadin:close" />
+    </button>
   </div>
+
   <script>
     import { wait } from "../utils";
 
-    const play = document.querySelector("#play") as HTMLDivElement;
+    const play = document.querySelector<HTMLElement>("#play")!;
 
-    const embedWrapper = document.querySelector(
+    const embedWrapper = document.querySelector<HTMLElement>(
       "#youtube-embed-wrapper"
-    ) as HTMLDivElement;
-    const playerWrapper = document.querySelector(
-      "#player-wrapper"
-    ) as HTMLDivElement;
+    )!;
+    const playerWrapper =
+      embedWrapper.querySelector<HTMLElement>("#player-wrapper")!;
 
     const closeButton = embedWrapper.querySelector("button")!;
 
     play.onclick = async () => {
-      if (play.classList.contains("expanded")) return;
+      if (
+        play.classList.contains("expanded") ||
+        play.classList.contains("shrinking")
+      )
+        return;
 
       play.classList.remove("hover:cursor-pointer");
       play.classList.add("expanded");
@@ -130,15 +206,17 @@ import img from "../assets/voices.png";
       const { width, height } = playerWrapper.getBoundingClientRect();
 
       playerWrapper.innerHTML = `
-        <iframe 
-          width=${Math.floor(width)} 
-          height=${Math.floor(height)} 
-          src="https://www.youtube-nocookie.com/embed/c8Gsh5oOWNE?autoplay=1&enablejsapi=1&modestbranding=1&rel=0" 
-          title="Voices From the Abyss" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          allowfullscreen>
-        </iframe>`;
+          <iframe 
+            width=${Math.floor(width)} 
+            height=${Math.floor(height)} 
+            src="https://www.youtube-nocookie.com/embed/c8Gsh5oOWNE?autoplay=1&enablejsapi=1&modestbranding=1&rel=0" 
+            title="Voices From the Abyss" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>`;
+
+      embedWrapper.classList.remove("-z-10");
 
       await wait(100);
 
@@ -149,13 +227,14 @@ import img from "../assets/voices.png";
     closeButton.onclick = async (e) => {
       e.stopPropagation();
 
+      embedWrapper.style.opacity = "0";
+      await wait(501);
+      playerWrapper.innerHTML = "";
+      embedWrapper.classList.add("-z-10");
+      closeButton.classList.remove("pointer-events-auto");
+
       play.classList.remove("expanded");
       play.classList.add("shrinking", "hover:cursor-pointer");
-      play.dataset.shrinking = "1";
-
-      playerWrapper.innerHTML = "";
-      embedWrapper.style.opacity = "0";
-      closeButton.classList.remove("pointer-events-auto");
 
       await wait(2300);
 

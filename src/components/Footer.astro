@@ -1,0 +1,143 @@
+---
+---
+
+<style>
+  svg {
+    width: 40px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .email {
+    position: relative;
+  }
+
+  label[for="email-toggle"] {
+    cursor: pointer;
+    position: relative;
+  }
+
+  #email-toggle ~ label {
+    display: flex;
+    align-items: center;
+  }
+
+  #email-content {
+    transform: scaleX(0) translateY(-50%);
+    transform-origin: left center;
+    transition: transform 0.2s;
+    position: absolute;
+    left: 100%;
+    top: 50%;
+  }
+
+  #email-toggle:checked ~ label #email-content {
+    transform: scaleX(1) translateY(-50%);
+  }
+
+  #email-content span {
+    opacity: 0;
+    transition: opacity 0.2s;
+    margin-left: 0.4em;
+  }
+
+  #email-toggle:checked ~ label #email-content span {
+    opacity: 1;
+  }
+
+  .saved-to-clipboard {
+    position: absolute;
+    bottom: 0;
+    width: max-content;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    color: #00c700;
+    font-size: 0.8em;
+    animation: clipboard 2s 0.2s;
+    opacity: 0;
+  }
+
+  @keyframes clipboard {
+    0% {
+      transform: translate(-50%, 150%);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, 75%);
+      opacity: 0;
+    }
+  }
+</style>
+<footer class:list={["my-20"]}>
+  <ul
+    style="
+        list-style-type: none;
+        display: flex;
+        margin: 0;
+        justify-content: center;
+        padding: 0;
+      "
+  >
+    <li>
+      <a
+        target="_blank"
+        href="https://github.com/0ctothorp"
+        title="My github profile"
+      >
+        <span class="sr-only">Github</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+          ></path>
+        </svg>
+      </a>
+    </li>
+    <li style="width: 20px"></li>
+    <li>
+      <div class="email">
+        <input id="email-toggle" class="sr-only" type="checkbox" />
+        <label for="email-toggle" class="-z-20">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+            ></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          <div id="email-content">
+            <a href="mailto:kkaminski9311@gmail.com">kkaminski9311@gmail.com</a>
+            <div class="hidden saved-to-clipboard">saved to clipboard</div>
+          </div>
+        </label>
+      </div>
+    </li>
+  </ul>
+</footer>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>("#email-toggle")!;
+  const saved = document.querySelector(".saved-to-clipboard")!;
+  let timeout: number;
+  input.onchange = (e) => {
+    if ((e.target as HTMLInputElement).checked) {
+      navigator.clipboard.writeText("kkaminski9311@gmail.com");
+      saved.classList.remove("hidden");
+      timeout = window.setTimeout(() => {
+        saved.classList.add("hidden");
+      }, 1800);
+    } else {
+      clearTimeout(timeout);
+      saved.classList.add("hidden");
+    }
+  };
+</script>
