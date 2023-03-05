@@ -19,6 +19,7 @@ import Footer from "../components/Footer.astro";
 
 // TODO:
 // 1. Style links and hovers
+// 2. Make play button hidden on load
 ---
 
 <Layout>
@@ -54,21 +55,6 @@ import Footer from "../components/Footer.astro";
       transition: transform 1s, width 1s 0.3s, height 1s 0.3s, clip-path 1s 1.3s,
         opacity 300ms ease-in, background-color 1s 1.3s;
     }
-
-    @media (hover: hover) and (pointer: fine) {
-      #play {
-        opacity: 0;
-      }
-
-      #play.expanded,
-      #play.shrinking {
-        opacity: 1;
-      }
-
-      #play-button-hover-zone:hover #play:not(.expanded) {
-        opacity: 1;
-      }
-    }
   </style>
 
   <header>
@@ -87,21 +73,10 @@ import Footer from "../components/Footer.astro";
         alt="pic"
       />
       <div class="gradient h-full absolute inset-0"></div>
-      <div id="play-button-hover-zone" class="absolute inset-0">
-        <div
-          id="play"
-          class:list={[
-            "w-28 sm:w-36",
-            "h-28 sm:h-36",
-            "fixed overflow-hidden hover:cursor-pointer",
-            "translate-x-[calc(50vw-50%)] translate-y-[calc(100px-50%)]",
-            "sm:translate-y-[calc(150px-50%)]",
-          ]}
-        >
-        </div>
-      </div>
     </div>
   </header>
+
+  <div id="line" class="invisible h-[1px]"></div>
 
   <main class:list={["w-11/12 sm:w-[55ch] m-auto pt-10 space-y-10 text-lg"]}>
     <p>Hi 👋 My name is Kamil and this is my cyber space.</p>
@@ -155,12 +130,45 @@ import Footer from "../components/Footer.astro";
   <Footer />
 
   <div
+    id="play"
+    role="button"
+    class:list={[
+      "w-28 sm:w-36",
+      "h-28 sm:h-36",
+      "fixed top-0 overflow-hidden hover:cursor-pointer",
+      "translate-x-[calc(50vw-50%)] translate-y-[calc(100px-50%)]",
+      "sm:translate-y-[calc(150px-50%)]",
+    ]}
+  >
+  </div>
+
+  <script>
+    import { throttle } from "../utils";
+
+    const play = document.querySelector<HTMLElement>("#play")!;
+
+    function toggle() {
+      if (window.scrollY >= 100) {
+        play.style.opacity = "0";
+        play.style.pointerEvents = "none";
+      } else {
+        play.style.opacity = "1";
+      }
+    }
+
+    toggle();
+
+    window.addEventListener("scroll", throttle(toggle, 100));
+  </script>
+
+  <div
     id="youtube-embed-wrapper"
     class:list={[
-      "fixed inset-0 -z-10",
+      "fixed inset-0",
       "w-full h-full",
       "flex flex-col",
       "opacity-0 transition-opacity duration-500",
+      "-z-10",
     ]}
   >
     <div id="iframe-wrapper" class="p-[2%] overflow-hidden">
@@ -197,6 +205,12 @@ import Footer from "../components/Footer.astro";
         play.classList.contains("shrinking")
       )
         return;
+
+      const scrollbarWidth = window.innerWidth - document.body.clientWidth;
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+      document.body.style.overflow = "hidden";
+
+      embedWrapper.style.zIndex = "20";
 
       play.classList.remove("hover:cursor-pointer");
       play.classList.add("expanded");
@@ -238,7 +252,11 @@ import Footer from "../components/Footer.astro";
 
       await wait(2300);
 
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+
       play.classList.remove("shrinking");
+      embedWrapper.style.zIndex = "";
     };
   </script>
 </Layout>

@@ -72,15 +72,10 @@
   }
 </style>
 <footer class:list={["my-20"]}>
-  <ul
-    style="
-        list-style-type: none;
+  <ul style="
         display: flex;
-        margin: 0;
         justify-content: center;
-        padding: 0;
-      "
-  >
+      ">
     <li>
       <a
         target="_blank"
@@ -101,25 +96,23 @@
     </li>
     <li style="width: 20px"></li>
     <li>
-      <div class="email">
-        <input id="email-toggle" class="sr-only" type="checkbox" />
-        <label for="email-toggle" class="-z-20">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-            ></path>
-            <polyline points="22,6 12,13 2,6"></polyline>
-          </svg>
-          <div id="email-content">
-            <a href="mailto:kkaminski9311@gmail.com">kkaminski9311@gmail.com</a>
-            <div class="hidden saved-to-clipboard">saved to clipboard</div>
-          </div>
-        </label>
-      </div>
+      <input id="email-toggle" class="sr-only" type="checkbox" />
+      <label for="email-toggle">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+          ></path>
+          <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+        <div id="email-content">
+          <a href="mailto:kkaminski9311@gmail.com">kkaminski9311@gmail.com</a>
+          <div class="hidden saved-to-clipboard">saved to clipboard</div>
+        </div>
+      </label>
     </li>
   </ul>
 </footer>
