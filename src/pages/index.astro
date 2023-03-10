@@ -19,7 +19,6 @@ import Footer from "../components/Footer.astro";
 
 // TODO:
 // 1. Style links and hovers
-// 2. Make play button hidden on load
 ---
 
 <Layout>
@@ -38,7 +37,24 @@ import Footer from "../components/Footer.astro";
       background-color: rgba(255, 255, 255, 0.4);
       -webkit-backdrop-filter: blur(3px);
       backdrop-filter: blur(3px);
-      transition: opacity 300ms ease-in;
+      opacity: 0;
+      animation: fadeIn 2000ms;
+      animation-timing-function: ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        pointer-events: none;
+      }
+      50% {
+        opacity: 0;
+        pointer-events: all;
+      }
+      100% {
+        opacity: 1;
+        pointer-events: all;
+      }
     }
 
     #play.expanded {
@@ -47,13 +63,13 @@ import Footer from "../components/Footer.astro";
       height: 100vh;
       background-color: rgba(0, 0, 0, 0.6);
       transform: translate(0, 0);
-      transition: clip-path 1s, width 1s 1s, height 1s 1s, opacity 300ms ease-in,
-        background-color 1s, transform 1s 1.3s;
+      transition: clip-path 1s, width 1s 1s, height 1s 1s, background-color 1s,
+        transform 1s 1.3s;
     }
 
     #play.shrinking {
       transition: transform 1s, width 1s 0.3s, height 1s 0.3s, clip-path 1s 1.3s,
-        opacity 300ms ease-in, background-color 1s 1.3s;
+        background-color 1s 1.3s;
     }
   </style>
 
