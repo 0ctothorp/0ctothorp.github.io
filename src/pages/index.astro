@@ -106,10 +106,25 @@ import Footer from "../components/Footer.astro";
           class="opacity-0 transition-opacity duration-300 -translate-y-[35%] mx-auto"
           id="image"
         />
+        <script>
+          const img = document.querySelector("#image") as HTMLImageElement;
+      
+          function makeVisible() {
+            img.style.opacity = '1';
+          }
+
+          if (!img.complete) {
+            img.onload = makeVisible;
+          } else {
+            makeVisible();
+          }
+        </script>
       </div>
       <div class="gradient h-full absolute inset-0"></div>
     </div>
   </header>
+
+  
 
   <main class:list={["w-11/12 sm:w-[55ch] m-auto pt-10 space-y-10 sm:text-lg"]}>
     <p>Hi 👋 My name is Kamil and this is my cyber space.</p>
@@ -294,13 +309,5 @@ import Footer from "../components/Footer.astro";
     };
   </script>
 
-  <script>
-    const img = document.querySelector("#image") as HTMLImageElement;
-
-    if (!img.complete) {
-      img.onload = (event) => {
-        img.style.opacity = "1";
-      };
-    }
-  </script>
+  
 </Layout>
