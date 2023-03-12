@@ -82,6 +82,15 @@ import Footer from "../components/Footer.astro";
     #placeholder {
       width: 1024px;
     }
+
+    #articles > li {
+        padding-left: 2rem;
+        text-indent: -2rem;
+      }
+
+      #articles > li::before {
+        content: "👉 ";
+      }
   </style>
 
   <header>
@@ -127,7 +136,7 @@ import Footer from "../components/Footer.astro";
   
 
   <main class:list={["w-11/12 sm:w-[55ch] m-auto pt-10 space-y-10 sm:text-lg"]}>
-    <p>Hi 👋 My name is Kamil and this is my cyber space.</p>
+    <p>Hi 👋 My name is Kamil and this is my personal cyber space.</p>
     <p>
       I develop software by day and make <a
         href="https://www.youtube.com/playlist?list=PLTDp1OhlEKi4__NYsuHAlPZ680wBbF_to"
@@ -135,20 +144,8 @@ import Footer from "../components/Footer.astro";
       > by night.
     </p>
     <p>
-      I sometimes make blogposts from my notes. I'll build a proper blog here one
-      day.
+      I sometimes make blogposts out of my notes:
     </p>
-
-    <style>
-      #articles > li {
-        padding-left: 2rem;
-        text-indent: -2rem;
-      }
-
-      #articles > li::before {
-        content: "👉 ";
-      }
-    </style>
 
     <ul id="articles" class:list={["list-inside"]}>
       <li>
@@ -173,6 +170,7 @@ import Footer from "../components/Footer.astro";
         </a>
       </li>
     </ul>
+    <p>I'll make a proper blog here one day...</p>
   </main>
 
   <Footer />
