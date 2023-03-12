@@ -1,9 +1,10 @@
 ---
-import { Picture } from "@astrojs/image/components";
+import { Picture, Image } from "@astrojs/image/components";
 import { Icon } from "astro-icon";
 
 import Layout from "../layouts/Layout.astro";
 import img from "../assets/voices.png";
+import imgPreview from "../assets/voices-128.webp";
 import Footer from "../components/Footer.astro";
 
 // TODO: Na mobile w orientacji pionowej, wyświetlanie filmiku nad backdropem
@@ -13,8 +14,6 @@ import Footer from "../components/Footer.astro";
 // Właściwie, na kompie też zamiast wyświetlać film nad całą stroną, to mógłbym
 // wyświetlić go w małym pływającym okienku, żeby dało się w międzyczasie przeglądać stronę
 
-// TODO: Dodać placeholder na czas ładowania obrazka w headerze.
-
 // TODO: Try out windi or unocss.
 
 // TODO:
@@ -22,7 +21,7 @@ import Footer from "../components/Footer.astro";
 // 2. use <youtube-lite>
 ---
 
-<Layout>
+<Layout title="0ctothorp - My piece of internet">
   <style>
     .gradient {
       background: rgb(10, 9, 8);
@@ -39,6 +38,7 @@ import Footer from "../components/Footer.astro";
       -webkit-backdrop-filter: blur(3px);
       backdrop-filter: blur(3px);
       opacity: 0;
+      transition: opacity 150ms;
       animation: fadeIn 2000ms;
       animation-timing-function: ease-in-out;
     }
@@ -72,6 +72,16 @@ import Footer from "../components/Footer.astro";
       transition: transform 1s, width 1s 0.3s, height 1s 0.3s, clip-path 1s 1.3s,
         background-color 1s 1.3s;
     }
+
+    @media (max-width: 640px) {
+      #placeholder {
+        width: 512px;
+      }
+    }
+
+    #placeholder {
+      width: 1024px;
+    }
   </style>
 
   <header>
@@ -83,19 +93,25 @@ import Footer from "../components/Footer.astro";
         "h-[200px] sm:h-[300px]",
       ]}
     >
-      <Picture
-        src={img}
-        widths={[512, 1024]}
-        sizes="(max-width: 640px) 512px, 1024px"
-        alt="pic"
+      <Image
+        src={imgPreview}
+        id="placeholder"
       />
+      <div class="absolute top-0 w-full h-[inherit]">
+        <Picture
+          src={img}
+          widths={[512, 1024]}
+          sizes="(max-width: 640px) 512px, 1024px"
+          alt="an album cover"
+          class="opacity-0 transition-opacity duration-300 -translate-y-[35%] mx-auto"
+          id="image"
+        />
+      </div>
       <div class="gradient h-full absolute inset-0"></div>
     </div>
   </header>
 
-  <div id="line" class="invisible h-[1px]"></div>
-
-  <main class:list={["w-11/12 sm:w-[55ch] m-auto pt-10 space-y-10 text-lg"]}>
+  <main class:list={["w-11/12 sm:w-[55ch] m-auto pt-10 space-y-10 sm:text-lg"]}>
     <p>Hi 👋 My name is Kamil and this is my cyber space.</p>
     <p>
       I develop software by day and make <a
@@ -104,7 +120,7 @@ import Footer from "../components/Footer.astro";
       > by night.
     </p>
     <p>
-      I sometimes publish some of my notes. I'll build a proper blog here one
+      I sometimes make blogposts from my notes. I'll build a proper blog here one
       day.
     </p>
 
@@ -170,6 +186,7 @@ import Footer from "../components/Footer.astro";
         play.style.pointerEvents = "none";
       } else {
         play.style.opacity = "1";
+        play.style.pointerEvents = 'initial';
       }
     }
 
@@ -275,5 +292,15 @@ import Footer from "../components/Footer.astro";
       play.classList.remove("shrinking");
       embedWrapper.style.zIndex = "";
     };
+  </script>
+
+  <script>
+    const img = document.querySelector("#image") as HTMLImageElement;
+
+    if (!img.complete) {
+      img.onload = (event) => {
+        img.style.opacity = "1";
+      };
+    }
   </script>
 </Layout>
