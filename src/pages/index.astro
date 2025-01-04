@@ -1,88 +1,11 @@
 ---
-import { Picture, Image } from "@astrojs/image/components";
-import { Icon } from "astro-icon";
-
 import Layout from "../layouts/Layout.astro";
-import img from "../assets/voices.png";
-import imgPreview from "../assets/voices-128.webp";
 import Footer from "../components/Footer.astro";
 
-// TODO: Na mobile w orientacji pionowej, wyświetlanie filmiku nad backdropem
-// zajmującym cały viewport nie ma sensu. Zamiast tego po prostu cały header mógłby być
-// iframem z filmem i ew. być sticky, gdyby na stronie było tyle treści, żeby było co
-// scrollować. W orientacji poziomej może to działać jak na kompie.
-// Właściwie, na kompie też zamiast wyświetlać film nad całą stroną, to mógłbym
-// wyświetlić go w małym pływającym okienku, żeby dało się w międzyczasie przeglądać stronę
-
-// TODO: Try out windi or unocss.
-
-// TODO:
-// 1. Style links and hovers
-// 2. use <youtube-lite>
 ---
 
 <Layout title="0ctothorp - My piece of internet">
   <style>
-    .gradient {
-      background: rgb(10, 9, 8);
-      background: linear-gradient(
-        0deg,
-        rgba(10, 9, 8, 1) 0%,
-        rgba(255, 255, 255, 0) 80%
-      );
-    }
-
-    #play {
-      clip-path: polygon(10% 10%, 90% 50%, 90% 50%, 10% 90%);
-      background-color: rgba(255, 255, 255, 0.4);
-      -webkit-backdrop-filter: blur(3px);
-      backdrop-filter: blur(3px);
-      opacity: 0;
-      transition: opacity 150ms;
-      animation: fadeIn 2000ms;
-      animation-timing-function: ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      0% {
-        opacity: 0;
-        pointer-events: none;
-      }
-      50% {
-        opacity: 0;
-        pointer-events: all;
-      }
-      100% {
-        opacity: 1;
-        pointer-events: all;
-      }
-    }
-
-    #play.expanded {
-      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.6);
-      transform: translate(0, 0);
-      transition: clip-path 1s, width 1s 1s, height 1s 1s, background-color 1s,
-        transform 1s 1.3s;
-    }
-
-    #play.shrinking {
-      transition: transform 1s, width 1s 0.3s, height 1s 0.3s, clip-path 1s 1.3s,
-        background-color 1s 1.3s;
-    }
-
-    @media (max-width: 640px) {
-      #placeholder {
-        width: 512px;
-      }
-    }
-
-    #placeholder {
-      width: 1024px;
-    }
-
     #articles > li {
         padding-left: 2rem;
         text-indent: -2rem;
@@ -91,55 +14,13 @@ import Footer from "../components/Footer.astro";
       #articles > li::before {
         content: "👉 ";
       }
-  </style>
-
-  <header>
-    <div
-      class:list={[
-        "relative",
-        "overflow-hidden",
-        "flex justify-center items-center",
-        "h-[200px] sm:h-[300px]",
-      ]}
-    >
-      <Image
-        src={imgPreview}
-        id="placeholder"
-      />
-      <div class="absolute top-0 w-full h-[inherit]">
-        <Picture
-          src={img}
-          widths={[512, 1024]}
-          sizes="(max-width: 640px) 512px, 1024px"
-          alt="an album cover"
-          class="opacity-0 transition-opacity duration-300 -translate-y-[35%] mx-auto"
-          id="image"
-        />
-        <script>
-          const img = document.querySelector("#image") as HTMLImageElement;
-      
-          function makeVisible() {
-            img.style.opacity = '1';
-          }
-
-          if (!img.complete) {
-            img.onload = makeVisible;
-          } else {
-            makeVisible();
-          }
-        </script>
-      </div>
-      <div class="gradient h-full absolute inset-0"></div>
-    </div>
-  </header>
-
-  
+  </style>  
 
   <main class:list={["w-11/12 sm:w-[55ch] m-auto pt-10 space-y-10 sm:text-lg"]}>
     <p>Hi 👋 My name is Kamil and this is my personal cyber space.</p>
     <p>
       I develop software by day and make <a
-        href="https://www.youtube.com/playlist?list=PLTDp1OhlEKi4__NYsuHAlPZ680wBbF_to"
+        href="https://0cto.link"
         >music</a
       > by night.
     </p>
@@ -174,138 +55,4 @@ import Footer from "../components/Footer.astro";
   </main>
 
   <Footer />
-
-  <div
-    id="play"
-    role="button"
-    class:list={[
-      "w-28 sm:w-36",
-      "h-28 sm:h-36",
-      "fixed top-0 overflow-hidden hover:cursor-pointer",
-      "translate-x-[calc(50vw-50%)] translate-y-[calc(100px-50%)]",
-      "sm:translate-y-[calc(150px-50%)]",
-    ]}
-  >
-  </div>
-
-  <script>
-    import { throttle } from "../utils";
-
-    const play = document.querySelector<HTMLElement>("#play")!;
-
-    function toggle() {
-      if (window.scrollY >= 100) {
-        play.style.opacity = "0";
-        play.style.pointerEvents = "none";
-      } else {
-        play.style.opacity = "1";
-        play.style.pointerEvents = 'initial';
-      }
-    }
-
-    toggle();
-
-    window.addEventListener("scroll", throttle(toggle, 100));
-  </script>
-
-  <div
-    id="youtube-embed-wrapper"
-    class:list={[
-      "fixed inset-0",
-      "w-full h-full",
-      "flex flex-col",
-      "opacity-0 transition-opacity duration-500",
-      "-z-10",
-    ]}
-  >
-    <div id="iframe-wrapper" class="p-[2%] overflow-hidden">
-      <div
-        id="player-wrapper"
-        class="aspect-video overflow-hidden max-h-full m-auto"
-      >
-      </div>
-    </div>
-    <button
-      type="button"
-      class="text-white mx-auto my-2 pointer-events-none w-9"
-    >
-      <Icon name="vaadin:close" />
-    </button>
-  </div>
-
-  <script>
-    import { wait } from "../utils";
-
-    const play = document.querySelector<HTMLElement>("#play")!;
-
-    const embedWrapper = document.querySelector<HTMLElement>(
-      "#youtube-embed-wrapper"
-    )!;
-    const playerWrapper =
-      embedWrapper.querySelector<HTMLElement>("#player-wrapper")!;
-
-    const closeButton = embedWrapper.querySelector("button")!;
-
-    play.onclick = async () => {
-      if (
-        play.classList.contains("expanded") ||
-        play.classList.contains("shrinking")
-      )
-        return;
-
-      const scrollbarWidth = window.innerWidth - document.body.clientWidth;
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-      document.body.style.overflow = "hidden";
-
-      embedWrapper.style.zIndex = "20";
-
-      play.classList.remove("hover:cursor-pointer");
-      play.classList.add("expanded");
-
-      await wait(2001);
-
-      const { width, height } = playerWrapper.getBoundingClientRect();
-
-      playerWrapper.innerHTML = `
-          <iframe 
-            width=${Math.floor(width)} 
-            height=${Math.floor(height)} 
-            src="https://www.youtube-nocookie.com/embed/c8Gsh5oOWNE?autoplay=1&enablejsapi=1&modestbranding=1&rel=0" 
-            title="Voices From the Abyss" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            allowfullscreen>
-          </iframe>`;
-
-      embedWrapper.classList.remove("-z-10");
-
-      await wait(100);
-
-      embedWrapper.style.opacity = "1";
-      closeButton.classList.add("pointer-events-auto");
-    };
-
-    closeButton.onclick = async (e) => {
-      e.stopPropagation();
-
-      embedWrapper.style.opacity = "0";
-      await wait(501);
-      playerWrapper.innerHTML = "";
-      embedWrapper.classList.add("-z-10");
-      closeButton.classList.remove("pointer-events-auto");
-
-      play.classList.remove("expanded");
-      play.classList.add("shrinking", "hover:cursor-pointer");
-
-      await wait(2300);
-
-      document.body.style.overflow = "";
-      document.body.style.paddingRight = "";
-
-      play.classList.remove("shrinking");
-      embedWrapper.style.zIndex = "";
-    };
-  </script>
-
-  
 </Layout>
