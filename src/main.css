@@ -10,4 +10,23 @@
   a:hover {
     color: white;
   }
+
+  h1 {
+    @apply text-xl uppercase text-indigo-400;
+  }
+
+  h2 {
+    @apply text-lg uppercase text-indigo-300;
+  }
+}
+
+@layer components {
+  .finger-li {
+    padding-left: 2rem;
+    text-indent: -2rem;
+  }
+
+  .finger-li::before {
+    content: "👉 ";
+  }
 }

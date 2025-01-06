@@ -2,6 +2,7 @@
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 import BaseHead from "../components/BaseHead.astro";
 import '../main.css';
+import Footer from "../components/Footer.astro";
 
 export interface Props {
   title?: string;
@@ -17,6 +18,12 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
     <BaseHead title={title} description={description} />
   </head>
   <body class="bg-[#0a0908] text-slate-300">
-    <slot />
+    <main class:list={["w-11/12 sm:w-[55ch] m-auto py-10 space-y-8 sm:text-lg"]}>
+      <header>
+        <span class="bg-gradient-to-r from-yellow-400 to-indigo-600 bg-clip-text text-xl"><a href="/" class="text-transparent">kamilkaminski.dev</a></span>
+      </header>
+      <slot />
+    </main>
+    <Footer />
   </body>
 </html>
