@@ -1,0 +1,11 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Content from '../content/index.mdx';
+import UListInside from '../components/UListInside.astro';
+import LiFingerEmoji from '../components/LiFingerEmoji.astro';
+
+---
+
+<Layout>
+    <Content components={{ ul: UListInside, li: LiFingerEmoji}} />
+</Layout>
