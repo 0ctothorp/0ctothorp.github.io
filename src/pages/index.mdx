@@ -1,5 +1,12 @@
-import Footer from "../components/Footer.astro";
-import Todo from "../components/Todo.astro";
+---
+layout: '../layouts/Layout.astro'
+---
+
+import LiFingerEmoji from '../components/LiFingerEmoji.astro';
+import Todo from '../components/Todo.astro';
+import UListInside from '../components/UListInside.astro';
+
+export const components = { ul: UListInside, li: LiFingerEmoji }
 
 Hi 👋 My name is Kamil and this is my personal cyber space.
 

@@ -4,11 +4,11 @@
 
 @layer base {
   a {
-    text-decoration: underline;
+    @apply text-yellow-200;
   }
 
   a:hover {
-    color: white;
+    @apply text-indigo-400;
   }
 
   h1 {
@@ -17,6 +17,10 @@
 
   h2 {
     @apply text-lg uppercase text-indigo-300;
+  }
+
+  pre {
+    @apply p-2;
   }
 }
 
