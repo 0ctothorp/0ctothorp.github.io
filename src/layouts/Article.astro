@@ -29,7 +29,7 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION, headings } = Astro.p
       <div class="flex gap-2 flex-col md:flex-row">
         <div class="lg:w-[calc(100%-9rem)] space-y-4"><slot /></div>
         <div class="hidden lg:block w-36">
-          <TableOfContents headings={headings} class="ml-4 mb-4 md:ml-0 md:mb-0" />
+          <TableOfContents headings={headings} class="ml-4 mb-4 md:ml-0 md:mb-0 sticky top-4" />
         </div>
       </div>
     </main>
