@@ -16,7 +16,7 @@
   }
 
   h2 {
-    @apply text-lg uppercase text-indigo-300;
+    @apply text-lg uppercase text-indigo-300 !mt-14;
   }
 
   pre {
