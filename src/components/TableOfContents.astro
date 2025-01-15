@@ -1,5 +1,6 @@
 ---
 import { type MarkdownHeading } from 'astro';
+import ToCList from './ToCList.astro';
 
 export interface Props {
     headings: MarkdownHeading[];
@@ -12,9 +13,11 @@ interface Heading extends MarkdownHeading { subheadings?: Array<Heading> };
 
 const headingsArr = headings as Array<Heading>;
   
-headingsArr.forEach(heading => { heading.subheadings = []; });
+headingsArr.forEach(heading => {
+  if(!heading.subheadings) heading.subheadings = []; 
+});
 
-const toc: Heading[] = [headingsArr[0]!]
+const toc: Heading[] = [headingsArr[0]!];
 
 for(let i = 1; i < headingsArr.length; i++) {
   const heading = headingsArr[i]!;
@@ -24,20 +27,10 @@ for(let i = 1; i < headingsArr.length; i++) {
   }
   parent.subheadings!.push(heading);
 }
+
 ---
 
-<ul class={className}>
-  {
-    toc[0]!.subheadings!.map((heading) => {
-      return (
-        <>
-            <li><a data-slug={heading.slug} href={`#${heading.slug}`}>{heading.text}</a></li>
-            {heading.subheadings?.length! > 0 && <Astro.self headings={heading.subheadings!} />}
-        </>
-      );
-    })
-  }
-</ul>
+<ToCList headings={toc} class={className}  />
 
 <script define:vars={{headings}}>
   const headingIds = headings.map((heading) => heading.slug);
