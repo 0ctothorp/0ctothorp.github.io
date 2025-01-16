@@ -12,9 +12,12 @@ const { headings, class: className } = Astro.props;
 interface Heading extends MarkdownHeading { subheadings?: Array<Heading> };
 
 const headingsArr = headings as Array<Heading>;
+
+let levelsNumber = 1;
   
 headingsArr.forEach(heading => {
   if(!heading.subheadings) heading.subheadings = []; 
+  if(heading.depth > levelsNumber) levelsNumber = heading.depth;
 });
 
 const toc: Heading[] = [headingsArr[0]!];
@@ -28,9 +31,45 @@ for(let i = 1; i < headingsArr.length; i++) {
   parent.subheadings!.push(heading);
 }
 
+// TODO: tu jest opisane jak działa ta animacja https://kld.dev/toc-animation/#drawing-a-path-along-the-links
+const tocPathPoints: [number, number][] = [];
+for(let i = 1; i < headingsArr.length; i++) {
+  const h = headingsArr[i]!;
+  const idxPercent = i / (headingsArr.length - 1) * 100;
+  if(i === 1) {
+    // tocPath += ` L0 ${idxPercent}`;
+    tocPathPoints.push([0, idxPercent]);
+    continue;
+  }
+  const prevh = headingsArr[i - 1]!;
+  const prevDepth = prevh.depth;
+  if(h.depth != prevDepth) {
+    // tocPath += ` L${h.depth - 2} ${(i - 1) / (headingsArr.length - 1) * 100}`;
+    tocPathPoints.push([h.depth - 2, (i - 1) / (headingsArr.length - 1) * 100]);
+  }
+  tocPathPoints.push([h.depth - 2, idxPercent]);
+  // tocPath += ` L${h.depth - 2} ${idxPercent}`;
+}
+
+let tocPath = "M0 0"
+for(const [x, y] of tocPathPoints) {
+  tocPath += ` L${x} ${y}`
+}
+
 ---
 
-<ToCList headings={toc} class={className}  />
+<div  class:list={["relative pl-2", className]} >
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox={`0 0 ${levelsNumber - 2} 100`}
+    style={{width: `${levelsNumber - 2}rem`}}
+    class:list={["absolute inset-0 h-full"] }
+    id="tocSvg"
+  >
+    <path d={tocPath} stroke="currentColor" stroke-width="1" fill="none" />
+  </svg>
+  <ToCList headings={toc[0]?.subheadings!} />
+</div>
 
 <script define:vars={{headings}}>
   const headingIds = headings.map((heading) => heading.slug);
