@@ -1,95 +1,178 @@
 ---
-import { type MarkdownHeading } from 'astro';
-import ToCList from './ToCList.astro';
+import { type MarkdownHeading } from "astro";
+import ToCList from "./ToCList.astro";
 
 export interface Props {
-    headings: MarkdownHeading[];
-    class?: string;
+  headings: MarkdownHeading[];
+  class?: string;
 }
 
 const { headings, class: className } = Astro.props;
 
-interface Heading extends MarkdownHeading { subheadings?: Array<Heading> };
+interface Heading extends MarkdownHeading {
+  subheadings?: Array<Heading>;
+}
 
 const headingsArr = headings as Array<Heading>;
 
 let levelsNumber = 1;
-  
-headingsArr.forEach(heading => {
-  if(!heading.subheadings) heading.subheadings = []; 
-  if(heading.depth > levelsNumber) levelsNumber = heading.depth;
+
+headingsArr.forEach((heading) => {
+  if (!heading.subheadings) heading.subheadings = [];
+  if (heading.depth > levelsNumber) levelsNumber = heading.depth;
 });
 
 const toc: Heading[] = [headingsArr[0]!];
 
-for(let i = 1; i < headingsArr.length; i++) {
+for (let i = 1; i < headingsArr.length; i++) {
   const heading = headingsArr[i]!;
   let parent = toc.at(-1)!;
-  while(heading.depth - 1> parent.depth) {
+  while (heading.depth - 1 > parent.depth) {
     parent = parent.subheadings!.at(-1)!;
   }
   parent.subheadings!.push(heading);
 }
-
-// TODO: tu jest opisane jak działa ta animacja https://kld.dev/toc-animation/#drawing-a-path-along-the-links
-const tocPathPoints: [number, number][] = [];
-for(let i = 1; i < headingsArr.length; i++) {
-  const h = headingsArr[i]!;
-  const idxPercent = i / (headingsArr.length - 1) * 100;
-  if(i === 1) {
-    // tocPath += ` L0 ${idxPercent}`;
-    tocPathPoints.push([0, idxPercent]);
-    continue;
-  }
-  const prevh = headingsArr[i - 1]!;
-  const prevDepth = prevh.depth;
-  if(h.depth != prevDepth) {
-    // tocPath += ` L${h.depth - 2} ${(i - 1) / (headingsArr.length - 1) * 100}`;
-    tocPathPoints.push([h.depth - 2, (i - 1) / (headingsArr.length - 1) * 100]);
-  }
-  tocPathPoints.push([h.depth - 2, idxPercent]);
-  // tocPath += ` L${h.depth - 2} ${idxPercent}`;
-}
-
-let tocPath = "M0 0"
-for(const [x, y] of tocPathPoints) {
-  tocPath += ` L${x} ${y}`
-}
-
 ---
 
-<div  class:list={["relative pl-2", className]} >
+<div id="tocContainer" class:list={["relative", className]}>
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    viewBox={`0 0 ${levelsNumber - 2} 100`}
-    style={{width: `${levelsNumber - 2}rem`}}
-    class:list={["absolute inset-0 h-full"] }
+    class:list={["absolute inset-0 w-full h-full"]}
     id="tocSvg"
   >
-    <path d={tocPath} stroke="currentColor" stroke-width="1" fill="none" />
+    <path
+      id="tocPath"
+      stroke="currentColor"
+      stroke-width="2"
+      fill="none"
+      stroke-dashoffset="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="transition-[stroke-dasharray] duration-300 ease-linear"
+    >
+    </path>
   </svg>
-  <ToCList headings={toc[0]?.subheadings!} />
+  <ToCList headings={toc[0]?.subheadings!} class="relative" />
 </div>
 
-<script define:vars={{headings}}>
+<script define:vars={{ headings }}>
   const headingIds = headings.map((heading) => heading.slug);
   const links = document.querySelectorAll(`[data-slug]`);
-  const linksMap = new Map(links.entries().map(([index, element]) => [element.dataset.slug, element]));
+
+  // Create some WeakMaps to store the distances to the top and
+  // bottom of each link
+  const linkStarts = new WeakMap();
+  const linkEnds = new WeakMap();
+
+  function drawPath() {
+    const path = tocPath;
+    if (!links.length) return;
+
+    // Start with an empty array of path data values (joined with
+    // spaces later)
+    let pathData = [];
+    let left = 0; // The last x position / indentation
+
+    // Iterate over each link to build up the pathData
+    links.forEach((link, i) => {
+      // TODO: change -5 to a safe value (should be half the padding value of ToC container)
+      const x = link.offsetLeft - 5;
+      const y = link.offsetTop;
+      const height = link.offsetHeight;
+      if (i === 0) {
+        // The top of the first link starts at 0px along the path.
+        linkStarts.set(link, 0);
+        // Like drawing with a pen...
+        // 'M'ove to the top left of the first link,
+        // and then draw a 'L'ine to the bottom left
+        pathData.push("M", x, y, "L", x, y + height);
+      } else {
+        // If the current link is indented differently than the last,
+        // then come down to the current link's top before moving
+        // left or right. This ensures we get 90-degrees angle at the
+        // corners.
+        if (left !== x) pathData.push("L", left, y);
+
+        // Draw a line to the top left of the current link
+        pathData.push("L", x, y);
+
+        // Apply the current path data to the path element
+        path.setAttribute("d", pathData.join(" "));
+
+        // Get the total length of the path now that it extends
+        // to the top of this link, and store it in our linkStarts
+        // WeakMap.
+        linkStarts.set(link, path.getTotalLength());
+
+        // Draw a line to the bottom left of the current link
+        pathData.push("L", x, y + height);
+      }
+
+      // Save the current link's x position to compare with the next
+      // link
+      left = x;
+
+      // Apply the current path data to the path element again
+      path.setAttribute("d", pathData.join(" "));
+
+      // Get the length of the path that now extends to the
+      // bottom of this link, and store it in our linkEnds WeakMap.
+      linkEnds.set(link, path.getTotalLength());
+    });
+  }
+
+  function updatePath() {
+    const path = tocPath;
+    const pathLength = path.getTotalLength();
+    const activeLinks = document.querySelectorAll("[data-slug].active");
+    let linkStart = pathLength;
+    let linkEnd = 0;
+    activeLinks.forEach((link) => {
+      // Set linkStart to the top of the earliest active link
+      linkStart = Math.min(linkStart, linkStarts.get(link));
+      // Set linkEnd to the bottom of the furthest active link
+      linkEnd = Math.max(linkEnd, linkEnds.get(link));
+    });
+    // If there are no active links, hide the path
+    path.style.display = activeLinks.length ? "inline" : "none";
+    // FINALLY, do the thing!
+    path.setAttribute(
+      "stroke-dasharray",
+      `1 ${linkStart} ${linkEnd - linkStart} ${pathLength}`
+    );
+  }
+
+  const linksMap = new Map(
+    links.entries().map(([index, element]) => [element.dataset.slug, element])
+  );
 
   const intersectionObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if(!headingIds.includes(entry.target.id)) return;
-      
-      if(entry.isIntersecting) {
-        linksMap.get(entry.target.id)?.classList.add("text-white", );
+      if (!headingIds.includes(entry.target.id)) return;
+
+      if (entry.isIntersecting) {
+        linksMap.get(entry.target.id)?.classList.add("text-white", "active");
       } else {
-        linksMap.get(entry.target.id)?.classList.remove("text-white");
+        linksMap.get(entry.target.id)?.classList.remove("text-white", "active");
       }
     });
+    updatePath();
   });
 
   headingIds.forEach((id) => {
     intersectionObserver.observe(document.getElementById(id));
-  })
-</script>
+  });
 
+  drawPath();
+  updatePath();
+  addResizeObserver();
+
+  function addResizeObserver() {
+    if (!tocContainer) return;
+    const observer = new ResizeObserver(() => {
+      drawPath();
+      updatePath();
+    });
+    observer.observe(tocContainer);
+  }
+</script>

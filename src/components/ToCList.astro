@@ -11,7 +11,7 @@ const { headings, class: className } = Astro.props;
 const depth = headings[0]!.depth;
 ---
 
-<ul class:list={['list-inside', depth > 2 && '*:ml-4', className]}>
+<ul class:list={['list-inside pl-2', depth > 2 && '*:ml-4', className]}>
   {
     headings.map((heading) => {
       return (
