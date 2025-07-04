@@ -25,12 +25,7 @@
 }
 
 @layer components {
-  .finger-li {
-    padding-left: 2rem;
-    text-indent: -2rem;
-  }
-
-  .finger-li::before {
-    content: "👉 ";
+  .arrow-li:has(>a:hover) > span[data-arrow] {
+    color: #fbbf24;
   }
 }
