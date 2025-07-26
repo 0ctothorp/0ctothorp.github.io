@@ -1,9 +1,9 @@
 ---
-import type { Heading } from './types';
+import type { Heading } from "./types";
 
 interface Props {
-    headings: Heading[];
-    class?: string | undefined;
+  headings: Heading[];
+  class?: string | undefined;
 }
 
 const { headings, class: className } = Astro.props;
@@ -11,13 +11,21 @@ const { headings, class: className } = Astro.props;
 const depth = headings[0]!.depth;
 ---
 
-<ul class:list={['list-inside pl-2', depth > 2 && '*:ml-4', className]}>
+<ul
+  class:list={["list-inside pl-2 space-y-3", depth > 2 && "*:ml-4", className]}
+>
   {
     headings.map((heading) => {
       return (
         <>
-            <li><a data-slug={heading.slug} href={`#${heading.slug}`}>{heading.text}</a></li>
-            {heading.subheadings?.length! > 0 && <Astro.self headings={heading.subheadings!} />}
+          <li class="leading-4">
+            <a data-slug={heading.slug} href={`#${heading.slug}`}>
+              {heading.text}
+            </a>
+          </li>
+          {heading.subheadings?.length! > 0 && (
+            <Astro.self headings={heading.subheadings!} />
+          )}
         </>
       );
     })
