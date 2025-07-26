@@ -2,9 +2,10 @@
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
-import '../main.css';
+import "../main.css";
 import TableOfContents from "../components/TableOfContents.astro";
 import type { MarkdownHeading } from "astro";
+import { List, X } from "lucide-astro";
 
 export interface Props {
   title?: string;
@@ -12,27 +13,64 @@ export interface Props {
   headings: MarkdownHeading[];
 }
 
-const { title = SITE_TITLE, description = SITE_DESCRIPTION, headings } = Astro.props;
-
+const {
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
+  headings,
+} = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} />
   </head>
-  <body class="bg-[#0a0908] text-slate-300">
-    <main class="w-11/12 md:w-10/12 xl:w-[60rem] m-auto py-10 space-y-8 sm:text-lg">
+  <body class="bg-bg text-slate-300">
+    <main
+      class="w-11/12 md:w-10/12 xl:w-[70rem] m-auto py-10 space-y-8 sm:text-lg"
+    >
       <header>
-        <span class="bg-gradient-to-r from-yellow-400 to-indigo-600 bg-clip-text text-xl"><a href="/" class="text-transparent">kamilkaminski.dev</a></span>
+        <span
+          class="bg-gradient-to-r from-yellow-400 to-indigo-600 bg-clip-text text-xl"
+          ><a href="/" class="text-transparent">kamilkaminski.dev</a></span
+        >
       </header>
+
       <div class="flex gap-2 flex-col md:flex-row">
         <div class="lg:w-[calc(100%-9rem)] space-y-4"><slot /></div>
-        <div class="hidden lg:block w-36">
-          <TableOfContents headings={headings} class="ml-4 mb-4 md:ml-0 md:mb-0 sticky top-4" />
+        <button
+          id="toc-toggle"
+          class="group lg:hidden fixed top-4 right-2 p-2 rounded-full bg-indigo-900/50 hover:bg-indigo-900/70 text-indigo-400"
+          data-open="false"
+        >
+          <List class="hidden group-data-[open=false]:block" />
+          <X class="hidden group-data-[open=true]:block" />
+        </button>
+        <div
+          id="toc-container"
+          class="fixed right-0 translate-x-full data-[open=true]:translate-x-0 w-72 bg-bg/50 p-4 lg:p-0 lg:static lg:translate-x-0 lg:block lg:w-1/5 transition-transform duration-300"
+          data-open="false"
+        >
+          <TableOfContents
+            headings={headings}
+            class="ml-4 mb-4 md:ml-0 md:mb-0 sticky top-4"
+          />
         </div>
       </div>
     </main>
     <Footer />
+
+    <script>
+      const tocToggle = document.getElementById("toc-toggle");
+      const tocContainer = document.getElementById("toc-container");
+      if (!tocToggle) throw new Error("no #toc-toggle element found");
+      if (!tocContainer) throw new Error("no #toc-container element found");
+
+      tocToggle.addEventListener("click", () => {
+        const isOpen = tocContainer.dataset.open === "true";
+        tocContainer.dataset.open = isOpen ? "false" : "true";
+        tocToggle.dataset.open = isOpen ? "false" : "true";
+      });
+    </script>
   </body>
 </html>

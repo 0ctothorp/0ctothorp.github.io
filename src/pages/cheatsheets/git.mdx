@@ -6,25 +6,25 @@ layout: '../../layouts/Article.astro'
 
 ## Worktrees
 
-Creates a new worktree with a new branch:
+### Create a new worktree with a new branch
 
 ```sh
 git worktree add <path>/<branch>
 ```
 
-Creates a new worktree and checkouts it to existing branch:
+### Create a new worktree and checkout it to existing branch
 
 ```sh
 git worktree add <path> <branch>
 ```
 
-Remove a worktree at path:
+### Remove worktree at path
 
 ```sh
 git worktree remove <path>
 ```
 
-List your worktrees:
+### List your worktrees
 
 ```sh
 git worktree list
@@ -32,27 +32,33 @@ git worktree list
 
 ## Tags
 
-Create a tag on last commit with name:
+### Create a tag on last commit with name
 
 ```sh
 git tag <name>
 ```
 
-Push a single tag to remote:
+### Push a single tag to remote
 
 ```sh
 git push origin <tag_name>
 ```
 
+### Fetch Tags
+
+```sh
+git fetch --tags
+```
+
 ## Branches
 
-Change current branch name:
+### Change current branch name
 
 ```sh
 git branch -m <new_name>
 ```
 
-Change upstream branch:
+### Change upstream branch
 
 ```sh
 git branch <branch_name> -u <your_new_remote>/<branch_name>
@@ -60,7 +66,9 @@ git branch <branch_name> -u <your_new_remote>/<branch_name>
 
 The remote branch needs to be present on the remote, so if you changed the local branch name, first do `git push origin HEAD`.
 
-Remove all branches that are already merged to master. Note: also removes local master branch:
+### Remove all branches that are already merged to master.
+
+> Note: also removes local master branch.
 
 ```sh
 git branch --merged master | grep -v '^\*' | xargs -n 1 git branch -d
@@ -70,7 +78,7 @@ git branch --merged master | grep -v '^\*' | xargs -n 1 git branch -d
 
 ## Stash
 
-Stash only unstaged changes:
+### Stash only unstaged changes
 
 ```sh
 git stash push --keep-index
