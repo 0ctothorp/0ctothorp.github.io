@@ -84,3 +84,10 @@ git branch --merged master | grep -v '^\*' | xargs -n 1 git branch -d
 git stash push --keep-index
 ```
 
+## Resetting state
+
+### Reset current branch to the remote state.
+
+```sh
+git fetch && git reset --hard @{u}
+```
