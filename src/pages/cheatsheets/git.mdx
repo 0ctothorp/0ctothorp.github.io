@@ -76,18 +76,32 @@ git branch --merged master | grep -v '^\*' | xargs -n 1 git branch -d
 
 `grep -v '^\*'` - makes sure that currently checked out branch is not deleted. Is is even possible to remove currently checked out branch?
 
+### Reset current branch to the remote state.
+
+```sh
+git fetch && git reset --hard @{u}
+```
+
+### Subtle difference in rebase command
+
+When you want to rebase your local branch onto a remote one remember to do it like this:
+
+```sh
+git rebase origin/<remote_branch_name>
+```
+
+instead of:
+
+```sh
+git rebase origin <remote_branch_name>
+```
+
+The second one will not work as expected. It will switch you to whatever `origin` points to and then will apply your local changes on top of it.
+
 ## Stash
 
 ### Stash only unstaged changes
 
 ```sh
 git stash push --keep-index
-```
-
-## Resetting state
-
-### Reset current branch to the remote state.
-
-```sh
-git fetch && git reset --hard @{u}
 ```
